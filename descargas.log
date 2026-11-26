@@ -1,0 +1,35 @@
+# descargas.log · consulta 2026-11-26 · id; estado; motivo
+N01; falla; EUR-Lex responde 202 con cuerpo vacío (desafío anti-bot); no se ha eludido
+N02; falla; EUR-Lex responde 202 con cuerpo vacío (desafío anti-bot); no se ha eludido
+N03; falla; EUR-Lex responde 202 con cuerpo vacío (desafío anti-bot); no se ha eludido
+N04; página; guardada como .md; 1 PDF enlazado apuntado, no descargado
+N05; falla; HTTP 403 (Cloudflare "Attention Required")
+G01; página; guardada como .md; sin enlaces .pdf directos (descarga en la propia página de la Comisión)
+G02; página; guardada como .md; sin enlaces .pdf directos
+G03; página; guardada como .md; sin enlaces .pdf directos
+G04; página; guardada como .md; sin enlaces .pdf directos
+G05; página; guardada como .md; 16 PDF enlazados apuntados, no descargados
+G06; ok; PDF
+G07; ok; PDF
+G08; ok; PDF
+G09; ok; PDF
+G10; ok; PDF; la fuente no trae fecha: archivo con prefijo PENDIENTE; la fecha está por buscar en el documento
+G11; página; guardada como .md; sin enlaces .pdf
+G12; página; guardada como .md; 3 PDF enlazados apuntados, no descargados
+G13; ok; PDF
+C01; falla; la URL devuelve solo la carcasa JavaScript de la web de Curia (RPEX), sin contenido
+C02; falla; igual que C01 (respuesta idéntica byte a byte)
+C03; página; guardada como .md; sin enlaces .pdf
+C04; página; guardada como .md; sin enlaces .pdf
+C05; falla; HTTP 403 Forbidden
+
+# Ampliación 2026-11-26 (aprobada por el usuario): PDF enlazados desde G05 y G12
+G05; ok; guías 03 a 16 descargadas (PDF); las guías 01 y 02 ya estaban como G06 y G07
+G12; ok; NIST.AI.100-1 en inglés, árabe (ara) y japonés (jpn) descargados (PDF)
+
+# Ampliacion 2026-11-26 (aprobada por el usuario)
+N04; ok; PDF enlazado descargado (presentacion del proyecto de ley)
+
+# Rutina semanal 2026-11-26 (aprobada por el usuario)
+NUEVO-20261126-19; página; nota de la AEPD guardada como .md; enlaza 1 PDF
+NUEVO-20261126-20; ok; PDF de la Declaración (laboratorio.aepd.es), aprobado por el usuario

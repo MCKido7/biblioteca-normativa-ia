@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Biblioteca de normativa de IA</title>
+<style>
+:root{--fondo:#f6f7f9;--tarjeta:#fff;--texto:#1b2430;--suave:#4a5666;--borde:#cfd6df;--acento:#0b4f8a;--acento2:#e8f1fa}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Arial,sans-serif;font-size:18px;line-height:1.45;color:var(--texto);background:var(--fondo)}
+header{background:var(--acento);color:#fff;padding:18px 28px}
+header h1{margin:0;font-size:1.7rem}
+header p{margin:4px 0 0;font-size:1rem;opacity:.95}
+main{max-width:1280px;margin:0 auto;padding:20px 24px 60px}
+section.bloque{background:var(--tarjeta);border:1px solid var(--borde);border-radius:10px;padding:16px 20px;margin-bottom:20px}
+h2{margin:0 0 10px;font-size:1.3rem}
+.controles{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;align-items:end}
+.controles label{display:flex;flex-direction:column;font-size:.85rem;color:var(--suave);font-weight:600;gap:4px}
+input,select,button,textarea{font:inherit;font-size:1rem;padding:8px 10px;border:1px solid #98a3b2;border-radius:6px;background:#fff;color:var(--texto)}
+button{cursor:pointer;background:var(--acento);color:#fff;border-color:var(--acento);font-weight:600}
+button.sec{background:#fff;color:var(--acento)}
+button:focus,input:focus,select:focus,textarea:focus,a:focus{outline:3px solid #f0a500;outline-offset:1px}
+.barra{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:12px}
+#cuenta{font-weight:600}
+.rejilla{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:16px}
+.tarjeta{background:var(--tarjeta);border:1px solid var(--borde);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.tarjeta h3{margin:0;font-size:1.1rem;line-height:1.3}
+.meta{color:var(--suave);font-size:.92rem}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-block;padding:2px 9px;border-radius:12px;font-size:.82rem;font-weight:600;background:#e9edf2;color:#2c3a4b;border:1px solid #cfd6df}
+.estado{color:#fff;border:0}
+.e-vigente{background:#1d7a3a}.e-aplicacion-diferida{background:#8a5a00}.e-en-tramitacion{background:#0b4f8a}
+.e-decaido{background:#5b6674}.e-orientativo{background:#5a3d9a}.e-firme{background:#14532d}
+.e-recurrido-anulado{background:#b3261e}.e-pendiente{background:#a24a00}
+.resumen{margin:0;padding-left:18px;font-size:.96rem}
+.resumen li{margin-bottom:3px}
+.acciones{display:flex;flex-wrap:wrap;gap:10px;margin-top:auto;align-items:center}
+.acciones a{color:var(--acento);font-weight:600}
+.novedades-lista{display:flex;flex-direction:column;gap:6px;margin:8px 0 0;padding:0;list-style:none}
+.novedades-lista li{padding:6px 10px;background:var(--acento2);border-radius:6px}
+a.id,button.id{background:none;border:0;color:var(--acento);padding:0;font-weight:700;text-decoration:underline;cursor:pointer}
+.linea{max-height:430px;overflow:auto;border-left:3px solid var(--acento);margin-left:8px;padding-left:18px}
+.evento{position:relative;margin:0 0 12px}
+.evento::before{content:"";position:absolute;left:-26px;top:7px;width:12px;height:12px;border-radius:50%;background:var(--acento)}
+.evento.futuro::before{background:#fff;border:3px solid #a24a00}
+.evento .f{font-weight:700}
+.futuro-etiqueta{font-size:.78rem;background:#a24a00;color:#fff;border-radius:10px;padding:1px 8px;margin-left:6px}
+dialog{width:min(980px,94vw);max-height:90vh;border:1px solid var(--borde);border-radius:10px;padding:0}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+.dlg-cab{display:flex;justify-content:space-between;align-items:center;padding:10px 18px;background:var(--acento2);position:sticky;top:0}
+.dlg-cuerpo{padding:6px 22px 22px;overflow:auto;max-height:78vh}
+.dlg-cuerpo table{border-collapse:collapse;width:100%;margin:10px 0}
+.dlg-cuerpo td,.dlg-cuerpo th{border:1px solid var(--borde);padding:5px 9px;text-align:left;vertical-align:top;font-size:.95rem}
+.dlg-cuerpo th{background:#eef2f6}
+.pregunta{display:flex;gap:10px;flex-wrap:wrap}
+.pregunta input{flex:1;min-width:260px}
+#respuesta{margin-top:12px}
+.resp-doc{border-left:4px solid var(--acento);padding:4px 12px;margin:10px 0;background:#fafcfe}
+.resp-doc blockquote{margin:4px 0;padding:0}
+.nota{font-size:.88rem;color:var(--suave)}
+.vacio{padding:24px;text-align:center;color:var(--suave)}
+@media print{.controles,.barra,button{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Biblioteca de normativa de IA</h1>
+  <p>Última actualización: <strong id="actualizado"></strong> · <span id="total"></span> documentos · Funciona sin conexión</p>
+</header>
+<main>
+
+<section class="bloque" aria-labelledby="h-nov">
+  <h2 id="h-nov">Novedades</h2>
+  <div id="novedades"></div>
+</section>
+
+<section class="bloque" aria-labelledby="h-preg">
+  <h2 id="h-preg">Pregunta a la biblioteca</h2>
+  <form class="pregunta" id="formPregunta">
+    <input type="text" id="pregunta" aria-label="Pregunta" placeholder="Por ejemplo: ¿qué dice la biblioteca sobre decisiones automatizadas?">
+    <button type="submit">Preguntar</button>
+  </form>
+  <p class="nota">Solo responde con frases literales de las fichas y cita el ID de cada documento. No usa internet ni inventa: si las fichas no lo dicen, lo indica.</p>
+  <div id="respuesta" aria-live="polite"></div>
+</section>
+
+<section class="bloque" aria-labelledby="h-fil">
+  <h2 id="h-fil">Buscar y filtrar</h2>
+  <div class="controles">
+    <label style="grid-column:span 2">Buscar (título, organismo, resumen, temas)<input type="search" id="q" placeholder="Escribe una o varias palabras"></label>
+    <label>Tipo<select id="f-tipo"></select></label>
+    <label>Ámbito<select id="f-ambito"></select></label>
+    <label>Tema<select id="f-tema"></select></label>
+    <label>Estado<select id="f-estado"></select></label>
+    <label>Vinculante<select id="f-vinc"></select></label>
+    <label>Ordenar por<select id="orden"><option value="fecha">Fecha (más reciente primero)</option><option value="titulo">Título (A-Z)</option><option value="id">ID</option></select></label>
+  </div>
+  <div class="barra">
+    <span id="cuenta"></span>
+    <button type="button" class="sec" id="limpiar">Quitar filtros</button>
+    <button type="button" id="exportar">Exportar lo que se ve a CSV</button>
+  </div>
+</section>
+
+<section class="bloque" aria-labelledby="h-lin">
+  <h2 id="h-lin">Línea de tiempo de fechas clave</h2>
+  <p class="nota">Muestra las fechas de las fichas de los documentos que se ven con los filtros. Las fechas posteriores a la última actualización llevan la etiqueta «Próxima».</p>
+  <div class="linea" id="linea"></div>
+</section>
+
+<div class="rejilla" id="rejilla"></div>
+</main>
+
+<dialog id="dlg">
+  <div class="dlg-cab"><strong id="dlg-tit"></strong><button type="button" id="dlg-cerrar">Cerrar</button></div>
+  <div class="dlg-cuerpo" id="dlg-cuerpo"></div>
+</dialog>
+
+<script id="datos" type="application/json">/*DATOS*/</script>
+<script>
+(function(){
+"use strict";
+var DB=JSON.parse(document.getElementById("datos").textContent);
+var DOCS=DB.docs, HOY=DB.actualizado;
+var $=function(id){return document.getElementById(id)};
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function norm(s){return String(s).normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase()}
+function slug(s){return norm(s).replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")}
+function safeUrl(u){return /^https?:\/\//i.test(u)?u:""}
+var byId={};DOCS.forEach(function(d){byId[d.id]=d});
+$("actualizado").textContent=HOY;$("total").textContent=DOCS.length;
+
+/* ---------- filtros ---------- */
+function uniq(f){var o={};DOCS.forEach(function(d){f(d).forEach(function(v){if(v)o[v]=1})});return Object.keys(o).sort(function(a,b){return a.localeCompare(b,"es")})}
+function llenar(id,etq,vals){var s=$(id);s.innerHTML='<option value="">'+etq+'</option>'+vals.map(function(v){return '<option>'+esc(v)+'</option>'}).join("")}
+llenar("f-tipo","Todos",uniq(function(d){return [d.tipo]}));
+llenar("f-ambito","Todos",uniq(function(d){return [d.ambito]}));
+llenar("f-tema","Todos",uniq(function(d){return d.temas}));
+llenar("f-estado","Todos",uniq(function(d){return [d.estado]}));
+llenar("f-vinc","Todos",uniq(function(d){return [d.vinculante]}));
+var F={q:"",tipo:"",ambito:"",tema:"",estado:"",vinc:"",orden:"fecha"};
+function visible(){
+  var terms=norm(F.q).split(/\s+/).filter(Boolean);
+  var r=DOCS.filter(function(d){
+    if(F.tipo&&d.tipo!==F.tipo)return false;
+    if(F.ambito&&d.ambito!==F.ambito)return false;
+    if(F.tema&&d.temas.indexOf(F.tema)<0)return false;
+    if(F.estado&&d.estado!==F.estado)return false;
+    if(F.vinc&&d.vinculante!==F.vinc)return false;
+    if(terms.length){var h=norm([d.titulo,d.organismo,d.resumen.join(" "),d.temas.join(" ")].join(" "));
+      for(var i=0;i<terms.length;i++){if(h.indexOf(terms[i])<0)return false}}
+    return true});
+  r.sort(function(a,b){
+    if(F.orden==="titulo")return a.titulo.localeCompare(b.titulo,"es");
+    if(F.orden==="id")return a.id.localeCompare(b.id,"es",{numeric:true});
+    return fkey(b.fecha).localeCompare(fkey(a.fecha))||a.id.localeCompare(b.id)});
+  return r;
+}
+function fkey(f){var m=String(f).match(/^\d{4}(-\d{2})?(-\d{2})?/);return m?m[0]+"0000-00-00".slice(m[0].length):"0000-00-00"}
+
+/* ---------- tarjetas ---------- */
+function chipEstado(e){return '<span class="chip estado e-'+slug(e)+'">'+esc(e)+'</span>'}
+function tarjeta(d){
+  var u=safeUrl(d.url);
+  return '<article class="tarjeta"><h3>'+esc(d.titulo)+'</h3>'+
+  '<div class="meta">'+esc(d.organismo)+' · '+esc(d.fecha)+'</div>'+
+  '<div class="chips">'+chipEstado(d.estado)+'<span class="chip">'+esc(d.tipo)+'</span><span class="chip">'+esc(d.ambito)+'</span><span class="chip">Vinculante: '+esc(d.vinculante)+'</span><span class="chip">'+esc(d.id)+'</span></div>'+
+  '<ul class="resumen">'+d.resumen.map(function(l){return '<li>'+esc(l)+'</li>'}).join("")+'</ul>'+
+  '<div class="meta">Temas: '+esc(d.temas.join("; "))+'</div>'+
+  '<div class="acciones">'+(u?'<a href="'+esc(u)+'" target="_blank" rel="noopener noreferrer">URL oficial</a>':'')+
+  '<button type="button" data-ficha="'+esc(d.id)+'">Ver ficha completa</button></div></article>';
+}
+function pintar(){
+  var r=visible();
+  $("cuenta").textContent=r.length+" de "+DOCS.length+" documentos";
+  $("rejilla").innerHTML=r.length?r.map(tarjeta).join(""):'<div class="vacio">Ningún documento coincide con los filtros.</div>';
+  pintarLinea(r);
+}
+
+/* ---------- línea de tiempo ---------- */
+function pintarLinea(r){
+  var ev=[];r.forEach(function(d){d.eventos.forEach(function(e){ev.push({f:e.f,t:e.t,id:d.id})})});
+  ev.sort(function(a,b){return a.f.localeCompare(b.f)||a.id.localeCompare(b.id)});
+  if(!ev.length){$("linea").innerHTML='<div class="vacio">Sin fechas clave para esta selección.</div>';return}
+  $("linea").innerHTML=ev.map(function(e){
+    var fut=e.f.slice(0,10)>HOY||(e.f.length===7&&e.f>HOY.slice(0,7));
+    return '<div class="evento'+(fut?' futuro':'')+'"><span class="f">'+esc(e.f)+'</span>'+(fut?'<span class="futuro-etiqueta">Próxima</span>':'')+' · '+esc(e.t)+' <button type="button" class="id" data-ficha="'+esc(e.id)+'">'+esc(e.id)+'</button></div>'}).join("");
+}
+
+/* ---------- novedades ---------- */
+function pintarNovedades(){
+  var lim=new Date(HOY+"T00:00:00");lim.setDate(lim.getDate()-28);
+  var limS=lim.toISOString().slice(0,10);
+  var nuevos=DOCS.filter(function(d){return d.fecha_alta>=limS}).sort(function(a,b){return b.fecha_alta.localeCompare(a.fecha_alta)||a.id.localeCompare(b.id)});
+  var h='<p><strong>Añadido en las últimas cuatro semanas</strong> (desde '+limS+'): '+nuevos.length+' documentos.</p>';
+  if(nuevos.length){
+    var grupos={};nuevos.forEach(function(d){(grupos[d.fecha_alta]=grupos[d.fecha_alta]||[]).push(d)});
+    h+=Object.keys(grupos).sort().reverse().map(function(fa){
+      var g=grupos[fa];
+      return '<details'+(g.length<=6?' open':'')+'><summary>'+esc(fa)+': '+g.length+' documentos</summary><ul class="novedades-lista">'+
+        g.map(function(d){return '<li><button type="button" class="id" data-ficha="'+esc(d.id)+'">'+esc(d.id)+'</button> · '+esc(d.titulo)+' '+chipEstado(d.estado)+'</li>'}).join("")+'</ul></details>'}).join("");
+  }
+  var cambios=DB.cambios_estado||[];
+  h+='<p style="margin-top:12px"><strong>Cambios de estado</strong></p>';
+  h+=cambios.length?'<ul class="novedades-lista">'+cambios.map(function(c){return '<li><button type="button" class="id" data-ficha="'+esc(c.id)+'">'+esc(c.id)+'</button> · '+esc(c.de)+' → '+esc(c.a)+' ('+esc(c.fecha)+')</li>'}).join("")+'</ul>':'<p class="nota">Ningún cambio de estado registrado: la biblioteca no guarda histórico previo a esta carga.</p>';
+  var vig=DOCS.filter(function(d){return ["PENDIENTE","en tramitación","aplicación diferida","recurrido / anulado"].indexOf(d.estado)>=0});
+  if(vig.length)h+='<p class="nota">Para vigilar en la rutina semanal: '+vig.map(function(d){return '<button type="button" class="id" data-ficha="'+esc(d.id)+'">'+esc(d.id)+'</button> ('+esc(d.estado)+')'}).join(", ")+'.</p>';
+  $("novedades").innerHTML=h;
+}
+
+/* ---------- ficha completa (markdown mínimo) ---------- */
+function inline(s){return esc(s).replace(/(https?:\/\/[^\s<)]+)/g,function(u){return '<a href="'+u+'" target="_blank" rel="noopener noreferrer">'+u+'</a>'})}
+function md(t){
+  var L=t.split(/\r?\n/),o=[],ul=false,tb=false;
+  function cierra(){if(ul){o.push("</ul>");ul=false}if(tb){o.push("</table>");tb=false}}
+  L.forEach(function(l){
+    if(/^\|/.test(l)){
+      if(/^\|[-\s|]+\|$/.test(l))return;
+      if(ul){o.push("</ul>");ul=false}
+      var c=l.replace(/^\||\|$/g,"").split("|").map(function(x){return x.trim()});
+      if(!tb){o.push("<table>");tb=true;o.push("<tr>"+c.map(function(x){return "<th>"+inline(x)+"</th>"}).join("")+"</tr>")}
+      else o.push("<tr>"+c.map(function(x){return "<td>"+inline(x)+"</td>"}).join("")+"</tr>");
+      return}
+    if(tb){o.push("</table>");tb=false}
+    var m;
+    if((m=l.match(/^(#{1,3})\s+(.*)/))){cierra();o.push("<h"+(m[1].length+1)+">"+inline(m[2])+"</h"+(m[1].length+1)+">");return}
+    if((m=l.match(/^-\s+(.*)/))){if(!ul){o.push("<ul>");ul=true}o.push("<li>"+inline(m[1])+"</li>");return}
+    cierra();if(l.trim())o.push("<p>"+inline(l)+"</p>");
+  });cierra();return o.join("\n");
+}
+var dlg=$("dlg");
+function abrir(id){var d=byId[id];if(!d)return;$("dlg-tit").textContent=d.id+" · "+d.titulo;$("dlg-cuerpo").innerHTML=md(d.ficha_md)+'<p class="nota">Archivo: '+esc(d.archivo)+' · Ficha: '+esc(d.ficha)+'</p>';
+  if(dlg.showModal)dlg.showModal();else dlg.setAttribute("open","");dlg.querySelector(".dlg-cuerpo").scrollTop=0}
+$("dlg-cerrar").onclick=function(){dlg.close?dlg.close():dlg.removeAttribute("open")};
+dlg.addEventListener("click",function(e){if(e.target===dlg)dlg.close()});
+document.addEventListener("click",function(e){var b=e.target.closest("[data-ficha]");if(b)abrir(b.getAttribute("data-ficha"))});
+
+/* ---------- CSV ---------- */
+function celda(v){v=String(v==null?"":v);return /[";\n\r]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}
+$("exportar").onclick=function(){
+  var r=visible(),cab=["id","tipo","ambito","organismo","titulo","fecha","estado","vinculante","temas","archivo","url","fecha_consulta"];
+  var f=[cab.join(";")].concat(r.map(function(d){return [d.id,d.tipo,d.ambito,d.organismo,d.titulo,d.fecha,d.estado,d.vinculante,d.temas.join("; "),d.archivo,d.url,d.fecha_consulta].map(celda).join(";")}));
+  var blob=new Blob(["﻿"+f.join("\r\n")],{type:"text/csv;charset=utf-8"});
+  var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="biblioteca_"+HOY+".csv";document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},500)};
+
+/* ---------- pregunta a la biblioteca (solo fichas) ---------- */
+var STOP=("de la el los las un una unos unas y o u a en por para con sin sobre entre que como cual cuales es son ser fue era hay ha han se su sus lo al del mas menos muy ya no si tambien este esta estos estas ese esa eso nos mi mis me te tu tus le les dice dicen dime puedo quiero quien quienes cuando donde cuanto cuanta cuantos biblioteca documento documentos ficha fichas tema temas").split(" ");
+function stem(w){return w.length>5?w.replace(/(ciones|cion|mente|ando|iendo|ados|adas|ado|ada|es|s)$/,""):w.replace(/s$/,"")}
+function toks(s){return (norm(s).match(/[a-z0-9]+/g)||[]).filter(function(w){return w.length>2&&STOP.indexOf(w)<0}).map(stem)}
+var PAS=[];
+DOCS.forEach(function(d){
+  var sec="";
+  d.ficha_md.split(/\r?\n/).forEach(function(l){
+    if(/^#{2,3}\s/.test(l)){sec=l.replace(/^#+\s*/,"");return}
+    if(/^#\s/.test(l)||/^\|[-\s|]+\|$/.test(l)||!l.trim())return;
+    var t=l.replace(/^[-\s]+/,"");
+    if(/^\|/.test(l)){var c=l.replace(/^\||\|$/g,"").split("|").map(function(x){return x.trim()});if(c[0]==="Campo")return;t=c[0]+": "+c.slice(1).join(" ")}
+    PAS.push({id:d.id,sec:sec||"Datos",t:t,k:toks(t)})});
+});
+var DF={};PAS.forEach(function(p){var s={};p.k.forEach(function(w){s[w]=1});Object.keys(s).forEach(function(w){DF[w]=(DF[w]||0)+1})});
+function responder(q){
+  var qt=toks(q),ids=(q.match(/\b(?:[NGC]\d{2}|NUEVO-\d{8}-\d{2})\b/gi)||[]).map(function(x){return x.toUpperCase()});
+  var out=$("respuesta");
+  if(!qt.length&&!ids.length){out.innerHTML='<p>Escribe una pregunta con alguna palabra concreta.</p>';return}
+  var sc=PAS.map(function(p){var s=0;qt.forEach(function(w){if(p.k.indexOf(w)>=0)s+=Math.log(1+PAS.length/(DF[w]||1))});
+    if(ids.indexOf(p.id)>=0)s+=1;return {p:p,s:s}}).filter(function(x){return x.s>0});
+  if(qt.length){var min=Math.log(1+PAS.length/ (Math.max.apply(null,qt.map(function(w){return DF[w]||1}))))*0.99;sc=sc.filter(function(x){return x.s>=min})}
+  sc.sort(function(a,b){return b.s-a.s});
+  var docs={},orden=[];
+  sc.forEach(function(x){var g=docs[x.p.id];if(!g){if(orden.length>=5)return;g=docs[x.p.id]={s:x.s,ps:[]};orden.push(x.p.id)}
+    if(g.ps.length<3&&g.ps.every(function(y){return y.t!==x.p.t}))g.ps.push(x.p)});
+  if(!orden.length){out.innerHTML='<p><strong>No consta en las fichas.</strong> Ninguna ficha contiene palabras de tu pregunta. Prueba con otros términos o usa el buscador.</p>';return}
+  out.innerHTML='<p><strong>Esto dice la biblioteca</strong> (frases literales de las fichas, ordenadas por coincidencia):</p>'+orden.map(function(id){var d=byId[id],g=docs[id];
+    return '<div class="resp-doc"><div><button type="button" class="id" data-ficha="'+esc(id)+'">['+esc(id)+']</button> '+esc(d.titulo)+' '+chipEstado(d.estado)+'</div>'+
+      g.ps.map(function(p){return '<blockquote>«'+esc(p.t)+'» <span class="nota">('+esc(p.sec)+')</span></blockquote>'}).join("")+'</div>'}).join("")+
+    '<p class="nota">Si no encuentras lo que buscas, la biblioteca no lo recoge. Haz clic en un ID para abrir la ficha completa.</p>';
+}
+$("formPregunta").addEventListener("submit",function(e){e.preventDefault();responder($("pregunta").value)});
+
+/* ---------- eventos ---------- */
+$("q").addEventListener("input",function(){F.q=this.value;pintar()});
+[["f-tipo","tipo"],["f-ambito","ambito"],["f-tema","tema"],["f-estado","estado"],["f-vinc","vinc"],["orden","orden"]].forEach(function(p){$(p[0]).addEventListener("change",function(){F[p[1]]=this.value;pintar()})});
+$("limpiar").onclick=function(){F={q:"",tipo:"",ambito:"",tema:"",estado:"",vinc:"",orden:"fecha"};$("q").value="";["f-tipo","f-ambito","f-tema","f-estado","f-vinc"].forEach(function(i){$(i).value=""});$("orden").value="fecha";pintar()};
+pintarNovedades();pintar();
+})();
+</script>
+</body>
+</html>
